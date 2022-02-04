@@ -12,7 +12,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-const dataSource = "localuser:localpass@tcp(172.30.0.1:3306)/localdb?charset=utf8&parseTime=True&loc=Local"
+const dataSource = "localuser:localpass@tcp(db:3306)/localdb?charset=utf8&parseTime=True&loc=Local"
 const defaultPort = "5050"
 
 func main() {
