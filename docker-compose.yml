@@ -1,0 +1,45 @@
+version: '3'
+services:
+  db:
+    restart: always
+    image: mysql:5.7.24
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_USER: localuser
+      MYSQL_PASSWORD: localpass
+      MYSQL_DATABASE: localdb
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - study-graphql-network
+
+  server:
+    build: .
+    ports:
+    - "5050:5050"
+    networks:
+      - study-graphql-network
+  
+  # frontコンテナを追加
+  front:
+    build:
+      context: ./frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/frontend:cached
+      - frontend_node_modules:/frontend/node_modules
+    tty: true
+    stdin_open: true
+    command: yarn dev
+
+volumes:
+  localdb:
+    external: false
+
+networks:
+  study-graphql-network:
+    external: true
