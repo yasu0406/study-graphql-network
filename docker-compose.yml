@@ -18,7 +18,7 @@ services:
 
   # backend(Go GraphQL Server)
   backend:
-    build: ./docker/backend
+    build: .
     ports:
     - "80:5050"
     networks:
@@ -26,7 +26,8 @@ services:
 
   # frontend(Next.js app)コンテナを追加
   frontend:
-    build: ./docker/frontend
+    image: node:16-alpine
+    working_dir: /usr/src/app
     ports:
       - 3000:3000
     volumes:
