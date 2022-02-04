@@ -16,25 +16,22 @@ services:
     networks:
       - study-graphql-network
 
-  server:
-    build: .
+  # backend(Go GraphQL Server)
+  backend:
+    build: ./docker/backend
     ports:
-    - "5050:5050"
+    - "80:5050"
     networks:
       - study-graphql-network
-  
-  # frontコンテナを追加
-  front:
-    build:
-      context: ./frontend
+
+  # frontend(Next.js app)コンテナを追加
+  frontend:
+    build: ./docker/frontend
     ports:
       - 3000:3000
     volumes:
-      - ./frontend:/frontend:cached
-      - frontend_node_modules:/frontend/node_modules
-    tty: true
-    stdin_open: true
-    command: yarn dev
+      - ./frontend/graphql:/usr/src/app
+    command: sh -c "npm install && npm run dev"
 
 volumes:
   localdb:
